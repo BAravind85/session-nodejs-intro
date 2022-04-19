@@ -21,5 +21,9 @@ router.post("/createdeveloper", batchanddeve.createdeveloper)
 
 router.get("/scholarshipdevelopers", batchanddeve.scholarshipdevelopers)
 router.get("/deveLoper", batchanddeve.deveLoper)
-
+const api = function(req, res, next) {
+    console.log("This is Aravind")
+    next()
+}
+router.get("/api", api, batchanddeve.basic)
 module.exports = router;

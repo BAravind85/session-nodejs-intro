@@ -19,13 +19,18 @@ const scholarshipdevelopers = async function(req, res) {
 
 }
 const deveLoper = async function(req, res) {
-    const getdetails = req.query
-    const data = await developmodel.find({ percentage: { $gte: getdetails.percentage } }).select({ batch: 1, _id: 0 })
-    const find = await batchmodel.find({ _id: data[0].batch, program: getdetails.program })
-    res.send({ data: find })
+    const value1 = req.query.percentage
+    const value2 = req.query.Batch
+    const data = await developmodel.find({ percentage: { $gte: value1 }, Batch: value2 })
+    res.send(data)
+}
+const basic = async function(req, res) {
+    console.log("Hi your in Handler now")
+    res.send("Hello ur first middleware gonna work")
 }
 
 module.exports.createbatch = createbatch
 module.exports.createdeveloper = createdeveloper
 module.exports.scholarshipdevelopers = scholarshipdevelopers
 module.exports.deveLoper = deveLoper
+module.exports.basic = basic
