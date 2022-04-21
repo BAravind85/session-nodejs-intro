@@ -13,12 +13,23 @@ mongoose.connect("mongodb+srv://Aravind:LwiZWgfyX5cZvF0O@cluster0.ltwzf.mongodb.
     })
     .then(() => console.log("MongoDb is connected"))
     .catch(err => console.log(err))
-app.use((req, res, next) => {
-    var d = new Date();
+    // app.use((req, res, next) => {
+    //     var d = new Date();
 
-    console.log(d.toLocaleDateString(), d.toLocaleTimeString(), req.ip, req.originalUrl)
+//     console.log(d.toLocaleDateString(), d.toLocaleTimeString(), req.ip, req.originalUrl)
+//     next()
+// })
+// app.use(function(req, res, next) {
+//     console.log('this is global MW')
+//     req['current-day'] = 'Wednesday'
+//     req['data'] = 'Aru'
+//     next()
+// })
+app.use(function(req, res, next) {
+    console.log("This is middilewaare of order and product")
     next()
 })
+app.use('/createorder', route)
 app.use('/', route);
 
 
