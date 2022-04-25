@@ -2,11 +2,10 @@ const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
 
 const createUser = async function(abcd, xyz) {
-
     let data = abcd.body;
     let savedData = await userModel.create(data);
     console.log(abcd.newAtribute);
-    xyz.send({ msg: savedData });
+    xyz.status(201).send({ msg: savedData });
 };
 
 const loginUser = async function(req, res) {
@@ -33,8 +32,8 @@ const loginUser = async function(req, res) {
         },
         "functionup-thorium"
     );
-    // res.setHeader("x-auth-token", token);
-    res.send({ status: true, data: token });
+    res.setHeader("x-auth-token", token);
+    res.status(400).send({ status: true, data: token });
 };
 
 const getUserData = async function(req, res) {
@@ -42,7 +41,7 @@ const getUserData = async function(req, res) {
     if (!token) token = req.headers["x-auth-token"];
 
     //If no token is present in the request header return error
-    if (!token) return res.send({ status: false, msg: "token must be present" });
+    if (!token) return res.status(400).send({ status: false, msg: "token must be present" });
 
     console.log(token);
 
@@ -90,13 +89,21 @@ const deleteuser = async function(req, res) {
     res.send({ data: updatedUser })
 };
 const postmessage = async function(req, res) {
-    let message = req.body.message
-    let user = await userModel.findById(req.params.userId)
-    if (!user) return res.send({ status: false, message: "no such a user exists" })
-    let updatepost = user.posts
-    updatepost.push(message)
-    let userupdate = await userModel.findOneAndUpdate({ _id: user._id }, { posts: updatepost }, { new: true })
-    res.send({ data: userupdate })
+    try {
+        let message = req.body.message
+        let user = await userModel.findById(req.params.userId)
+        if (!user) return res.send({ status: false, message: "no such a user exists" })
+        let updatepost = user.posts
+        updatepost.push(message)
+        let userupdate = await userModel.findOneAndUpdate({ _id: user._id }, { posts: updatepost }, { new: true })
+        res.send({ data: userupdate })
+    } catch (err) {
+        console.log("this is error", err.message)
+        res.status(400).send({
+            msg: "error",
+            error: err.message
+        })
+    }
 }
 
 module.exports.createUser = createUser;
